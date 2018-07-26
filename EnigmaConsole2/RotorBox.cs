@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace EnigmaConsole2
 {
-    class Program
+    public class RotorBox
     {
-        static void Main(string[] args)
-        {
-            
-        }
+
     }
 }
