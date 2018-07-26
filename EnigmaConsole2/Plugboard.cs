@@ -43,8 +43,8 @@ namespace EnigmaConsole2
 
         public Plug(char char1, char char2)
         {
-            Char1 = char1;
-            Char2 = char2;
+            Char1 = char1.ToString().ToUpper()[0];
+            Char2 = char2.ToString().ToUpper()[0];
         }
 
         public bool IsConflicting(Plug plug)
