@@ -8,6 +8,16 @@ namespace EnigmaConsole2
 {
     public class RotorBox
     {
+        bool doubleStep;
+
+        public RotorBox()
+        {
+
+        }
+    }
+
+    public struct Rotor
+    {
 
     }
 }

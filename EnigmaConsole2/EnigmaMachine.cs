@@ -13,7 +13,11 @@ namespace EnigmaConsole2
 
         public string Encrypt(string plainText)
         {
-            return "";
+            string result = "";
+            for (int i = 0; i < plainText.Length; i++)
+                result += p.Encode(plainText[i]);
+
+            return result;
         }
 
         public string Decrypt(string cipherText)
