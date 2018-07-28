@@ -9,13 +9,15 @@ namespace EnigmaConsole2
     public class RotorBox
     {
         Rotor[] Rotors = new Rotor[0];
+        bool DoubleStep;
 
-        public RotorBox()
+        public RotorBox(bool doubleStep, params Rotor[] rotors)
         {
-
+            Rotors = rotors;
+            DoubleStep = doubleStep;
         }
 
-        public void SetRotorBox()
+        public void Encode()
         {
 
         }
@@ -24,7 +26,7 @@ namespace EnigmaConsole2
     public struct Rotor
     {
         public const string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        Number number;
+        readonly Number number;
 
         public string AToZ
         {
@@ -32,6 +34,8 @@ namespace EnigmaConsole2
             {
                 switch (number)
                 {
+                    case Number.X:
+                        return alphabet;
                     case Number.I:
                         return "EKMFLGDQVZNTOWYHXUSPAIBRCJ";
                     case Number.II:
@@ -60,6 +64,8 @@ namespace EnigmaConsole2
             {
                 switch (number)
                 {
+                    case Number.X:
+                        return '\0';
                     case Number.I:
                         return 'Q';
                     case Number.II:
@@ -88,6 +94,8 @@ namespace EnigmaConsole2
             {
                 switch (number)
                 {
+                    case Number.X:
+                        return '\0';
                     case Number.I:
                         return '\0';
                     case Number.II:
@@ -111,7 +119,11 @@ namespace EnigmaConsole2
         }
         public int NotchBIndex { get { return alphabet.IndexOf(NotchB); } }
         public char Position;
-        public int PositionIndex { get { return alphabet.IndexOf(Position); } }
+        public int PositionIndex
+        {
+            get { return alphabet.IndexOf(Position); }
+            set { Position = alphabet[value]; }
+        }
 
         public Rotor(int number, char position)
         {
@@ -121,11 +133,16 @@ namespace EnigmaConsole2
 
         public int Encode(int i)
         {
-            int meh = AToZIndexes[i + PositionIndex];
-
-            return meh;
+            return AToZIndexes[i + PositionIndex < 26 ?
+                i + PositionIndex :
+                i + PositionIndex - 26];
         }
 
-        public enum Number { I = 1, II = 2, III = 3, IV = 4, V = 5, VI = 6, VII = 7, VIII = 8 };
+        public void TurnRotor()
+        {
+            PositionIndex++;
+        }
+
+        public enum Number { X = 0, I = 1, II = 2, III = 3, IV = 4, V = 5, VI = 6, VII = 7, VIII = 8 };
     }
 }
