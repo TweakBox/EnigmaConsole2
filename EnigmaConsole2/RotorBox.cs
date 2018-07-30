@@ -8,12 +8,13 @@ namespace EnigmaConsole2
 {
     public class RotorBox
     {
-        Rotor[] Rotors = new Rotor[0];
+        Rotor[] rotors = new Rotor[0];
+        Reflector reflector = new Reflector();
         bool DoubleStep;
 
         public RotorBox(bool doubleStep, params Rotor[] rotors)
         {
-            Rotors = rotors;
+            this.rotors = rotors;
             DoubleStep = doubleStep;
         }
 
@@ -25,8 +26,14 @@ namespace EnigmaConsole2
 
     public struct Rotor
     {
-        public const string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        public static string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         readonly Number number;
+
+        public Rotor(int number, char position)
+        {
+            this.number = (Number)number;
+            Offset = position.ToString().ToUpper()[0];
+        }
 
         public string AToZ
         {
@@ -37,6 +44,7 @@ namespace EnigmaConsole2
                     case Number.X:
                         return alphabet;
                     case Number.I:
+                        //     "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                         return "EKMFLGDQVZNTOWYHXUSPAIBRCJ";
                     case Number.II:
                         return "AJDKSIRUXBLHWTMCQGZNPYFVOE";
@@ -57,7 +65,7 @@ namespace EnigmaConsole2
                 }
             }
         }
-        public int[] AToZIndexes { get { return alphabet.Select(c => alphabet.IndexOf(c)).ToArray(); } }
+        public int[] AToZIndexes { get { return AToZ.Select(c => alphabet.IndexOf(c)).ToArray(); } }
         public char NotchA
         {
             get
@@ -118,31 +126,51 @@ namespace EnigmaConsole2
             }
         }
         public int NotchBIndex { get { return alphabet.IndexOf(NotchB); } }
-        public char Position;
-        public int PositionIndex
+        public char Offset;
+        public int OffsetIndex
         {
-            get { return alphabet.IndexOf(Position); }
-            set { Position = alphabet[value]; }
+            get { return alphabet.IndexOf(Offset); }
+            set { Offset = alphabet[value]; }
         }
 
-        public Rotor(int number, char position)
-        {
-            this.number = (Number)number;
-            Position = position.ToString().ToUpper()[0];
-        }
+        public int EncodeFromRight(int i) { return AToZIndexes[(i + OffsetIndex) % 26]; }
+        public int EncodeFromLeft(int i) { return AToZIndexes.ToList().IndexOf((i + OffsetIndex) % 26); }
 
-        public int Encode(int i)
-        {
-            return AToZIndexes[i + PositionIndex < 26 ?
-                i + PositionIndex :
-                i + PositionIndex - 26];
-        }
-
-        public void TurnRotor()
-        {
-            PositionIndex++;
-        }
+        public void TurnRotor() { OffsetIndex %= 26; }
 
         public enum Number { X = 0, I = 1, II = 2, III = 3, IV = 4, V = 5, VI = 6, VII = 7, VIII = 8 };
+    }
+
+    public struct Reflector
+    {
+        public static string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        public ID id;
+
+        public Reflector(int id) { this.id = (ID)id; }
+
+        public string AToZ
+        {
+            get
+            {
+                switch (id)
+                {
+                    case ID.X:
+                        return alphabet;
+                    case ID.A:
+                        return "EJMZALYXVBWFCRQUONTSPIKHGD";
+                    case ID.B:
+                        return "YRUHQSLDPXNGOKMIEBFZCWVJAT";
+                    case ID.C:
+                        return "FVPJIAOYEDRZXWGCTKUQSBNMHL";
+                    default:
+                        return "";
+                }
+            }
+        }
+        public int[] AToZIndexes { get { return AToZ.Select(c => alphabet.IndexOf(c)).ToArray(); } }
+
+        public int Encode(int i) { return AToZIndexes[i % 26]; }
+
+        public enum ID { X = 0, A = 1, B = 2, C = 3 }
     }
 }
