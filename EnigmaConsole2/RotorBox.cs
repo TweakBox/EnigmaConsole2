@@ -8,19 +8,20 @@ namespace EnigmaConsole2
 {
     public class RotorBox
     {
-        Rotor[] rotors = new Rotor[0];
         Reflector reflector = new Reflector();
+        Rotor[] rotors = new Rotor[0];
         bool DoubleStep;
 
-        public RotorBox(bool doubleStep, params Rotor[] rotors)
+        public RotorBox(bool doubleStep, Reflector reflector, params Rotor[] rotors)
         {
-            this.rotors = rotors;
             DoubleStep = doubleStep;
+            this.reflector = reflector;
+            this.rotors = rotors;
         }
 
         public void Encode()
         {
-
+            s
         }
     }
 
